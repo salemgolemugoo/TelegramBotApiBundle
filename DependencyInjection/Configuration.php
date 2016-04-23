@@ -27,12 +27,13 @@ class Configuration implements ConfigurationInterface
                     ->scalarNode("token")->isRequired()->end()
                     ->scalarNode("bot_name")->end()
                     ->arrayNode("webhook")
-                    ->children()
-                        ->scalarNode("domain")->end()
-                        ->scalarNode("path_prefix")->end()
-                        ->scalarNode("update_receiver")->defaultValue("shaygan.my_update_receiver")->end()
+                        ->children()
+                            ->scalarNode("domain")->end()
+                            ->scalarNode("path_prefix")->end()
+                            ->scalarNode("update_receiver")->defaultValue("shaygan.my_update_receiver")->end()
+                        ->end()
                     ->end()
-                    ->end()
+                    ->scalarNode("certificate")->end()
                 ->end();
 
 

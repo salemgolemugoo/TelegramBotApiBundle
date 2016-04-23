@@ -10,6 +10,5 @@ use TelegramBot\Api\Types\Update;
  */
 interface UpdateReceiverInterface
 {
-
     public function handleUpdate(Update $update);
 }

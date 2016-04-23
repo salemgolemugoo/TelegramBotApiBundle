@@ -21,12 +21,19 @@ class SetupWebhookCommand extends ContainerAwareCommand
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $api = $this->getContainer()->get('shaygan.telegram_bot_api');
-        $config = $this->getContainer()->getParameter('shaygan_telegram_bot_api.config');
+        $container = $this->getContainer();
+        $api = $container->get('shaygan.telegram_bot_api');
+        $config = $container->getParameter('shaygan_telegram_bot_api.config');
         $io = new SymfonyStyle($input, $output);
+        $file = null;
 
         if (empty($config['webhook']['domain'])) {
             throw new InvalidArgumentException('"shaygan_telegram_bot_api.webhook.domain" is not set in config.yml');
+        }
+
+        if (!empty($config['certificate'])) {
+            $rootDir = $container->getParameter('kernel.root_dir');
+            $file = new \CURLFile($rootDir . $config['certificate'], 'plain/text', 'certificate.pem');
         }
 
         $url = sprintf('https://%s%s/telegram-bot/update/%s',
@@ -36,8 +43,12 @@ class SetupWebhookCommand extends ContainerAwareCommand
         );
 
         try {
-            if ($result = $api->setWebhook($url)) {
+            if ($result = $api->setWebhook($url, $file)) {
                 $io->success(sprintf('Webhook set to "%s"', $url));
+
+                if (!empty($config['certificate'])) {
+                    $io->success('Certificate uploaded');
+                }
             } else {
                 $io->error($result);
             }
