@@ -33,7 +33,13 @@ class SetupWebhookCommand extends ContainerAwareCommand
 
         if (!empty($config['certificate'])) {
             $rootDir = $container->getParameter('kernel.root_dir');
-            $file = new \CURLFile($rootDir . $config['certificate'], 'plain/text', 'certificate.pem');
+            $filePath = $rootDir . $config['certificate'];
+
+            if (!file_exists($filePath)) {
+                throw new InvalidArgumentException(sprintf('SSL certificate file was not found "%s"', $filePath));
+            }
+
+            $file = new \CURLFile($filePath, 'plain/text', 'certificate.pem');
         }
 
         $url = sprintf('https://%s%s/telegram-bot/update/%s',
