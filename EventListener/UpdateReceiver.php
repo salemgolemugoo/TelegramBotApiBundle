@@ -2,8 +2,9 @@
 
 namespace Shaygan\TelegramBotApiBundle\UpdateReceiver;
 
+use Shaygan\TelegramBotApiBundle\EventListener\UpdateReceiverInterface;
 use Shaygan\TelegramBotApiBundle\TelegramBotApi;
-use Shaygan\TelegramBotApiBundle\Type\Update;
+use TelegramBot\Api\Types\Update;
 
 /**
  *
@@ -23,7 +24,7 @@ class UpdateReceiver implements UpdateReceiverInterface
 
     public function handleUpdate(Update $update)
     {
-        $message = json_decode(json_encode($update->message), true);
+        $message = json_decode(json_encode($update->getMessage()), true);
 
         switch ($message['text']) {
             case "/about":

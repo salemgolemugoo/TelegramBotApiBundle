@@ -1,8 +1,8 @@
 <?php
 
-namespace Shaygan\TelegramBotApiBundle\UpdateReceiver;
+namespace Shaygan\TelegramBotApiBundle\EventListener;
 
-use Shaygan\TelegramBotApiBundle\Type\Update;
+use TelegramBot\Api\Types\Update;
 
 /**
  *
